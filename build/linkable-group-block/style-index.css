@@ -11,17 +11,7 @@
   position: relative;
 }
 
-/* .wp-block-group.is-linkable .group-link {
-	position: absolute;
-	inset: 0;
-	z-index: 1;
-	display: block;
-	cursor: pointer;
-	text-decoration: none;
-	color: inherit;
-	background: rgba(255, 0, 0, 0.2);
-} */
-.wp-block-group.is-linkable .group-link::after {
+.wp-block-group.is-linkable .stretched-link::after {
   position: absolute;
   top: 0;
   right: 0;
@@ -32,7 +22,7 @@
   pointer-events: auto;
 }
 
-.wp-block-group.is-linkable a:not(.group-link) {
+.wp-block-group.is-linkable a:not(.stretched-link) {
   position: relative;
   z-index: 2;
   pointer-events: auto;

@@ -14,6 +14,7 @@ import {
 	FlexItem,
 } from "@wordpress/components";
 import { BlockListBlock } from "@wordpress/block-editor";
+import { LinkControl } from "@wordpress/block-editor";
 import { check, adminLinks } from "@wordpress/icons";
 
 import "./style.scss";
@@ -37,6 +38,10 @@ addFilter(
 					type: "string",
 					default: undefined,
 				},
+				rel: {
+					type: "string",
+					default: undefined,
+				},
 			},
 		};
 	},
@@ -52,7 +57,7 @@ addFilter(
 
 			if (name !== "core/group") return <BlockEdit {...props} />;
 
-			const { linkUrl, linkTarget } = attributes;
+			const { linkUrl, linkTarget, rel } = attributes;
 			const [showPopover, setShowPopover] = useState(false);
 
 			return (
@@ -76,41 +81,43 @@ addFilter(
 							onClose={() => setShowPopover(false)}
 							focusOnMount={false}
 						>
-							<div style={{ width: 360, padding: 12 }}>
-								<Flex>
-									<FlexBlock>
-										<TextControl
-											placeholder="Paste or type a URL"
-											value={attributes.linkUrl}
-											onChange={(url) => setAttributes({ linkUrl: url })}
-										/>
-									</FlexBlock>
-									<FlexItem>
-										<ToolbarButton
-											icon={check}
-											label="Apply"
-											onClick={() => setShowPopover(false)}
-										/>
-									</FlexItem>
-									{attributes.linkUrl && (
-										<FlexItem>
-											<ToolbarButton
-												//icon={no}
-												label="Clear"
-												onClick={() => {
-													setAttributes({ linkUrl: "", linkTarget: undefined });
-													setShowPopover(false);
-												}}
-											/>
-										</FlexItem>
-									)}
-								</Flex>
-
-								<ToggleControl
-									label="Open in new tab"
-									checked={attributes.linkTarget === "_blank"}
-									onChange={(value) =>
-										setAttributes({ linkTarget: value ? "_blank" : undefined })
+							<div style={{ width: 360 }}>
+								<LinkControl
+									searchInputPlaceholder="Search or type URL"
+									value={{
+										url: attributes.linkUrl,
+										opensInNewTab: attributes.linkTarget === "_blank",
+									}}
+									onChange={(newValue) => {
+										setAttributes({
+											linkUrl: newValue.url,
+											linkTarget: newValue.opensInNewTab ? "_blank" : undefined,
+										});
+									}}
+									settings={[
+										{
+											id: "opensInNewTab",
+											title: "Open in new tab",
+											onChange: (isNewTab) =>
+												setAttributes({
+													linkTarget: isNewTab ? "_blank" : undefined,
+												}),
+											checked: attributes.linkTarget === "_blank",
+										},
+										{
+											id: "markAsNofollow",
+											title: "Mark as nofollow",
+											onChange: (value) =>
+												setAttributes({ rel: value ? "nofollow" : undefined }),
+											checked: attributes.rel === "nofollow",
+										},
+									]}
+									onRemove={() =>
+										setAttributes({
+											linkUrl: undefined,
+											linkTarget: undefined,
+											rel: undefined,
+										})
 									}
 								/>
 							</div>

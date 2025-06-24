@@ -2,37 +2,6 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "../../../../../../../../node_modules/@wordpress/icons/build-module/library/check.js":
-/*!*******************************************************************************************!*\
-  !*** ../../../../../../../../node_modules/@wordpress/icons/build-module/library/check.js ***!
-  \*******************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/primitives */ "@wordpress/primitives");
-/* harmony import */ var _wordpress_primitives__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
-/**
- * WordPress dependencies
- */
-
-
-const check = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__.SVG, {
-  xmlns: "http://www.w3.org/2000/svg",
-  viewBox: "0 0 24 24",
-  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_0__.Path, {
-    d: "M16.7 7.1l-6.3 8.5-3.3-2.5-.9 1.2 4.5 3.4L17.9 8z"
-  })
-});
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (check);
-//# sourceMappingURL=check.js.map
-
-/***/ }),
-
 /***/ "./src/linkable-group-block/index.js":
 /*!*******************************************!*\
   !*** ./src/linkable-group-block/index.js ***!
@@ -50,10 +19,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @wordpress/icons */ "../../../../../../../../node_modules/@wordpress/icons/build-module/library/check.js");
 /* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./style.scss */ "./src/linkable-group-block/style.scss");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__);
+
 
 
 
@@ -78,6 +47,10 @@ __webpack_require__.r(__webpack_exports__);
       linkTarget: {
         type: "string",
         default: undefined
+      },
+      rel: {
+        type: "string",
+        default: undefined
       }
     }
   };
@@ -97,7 +70,8 @@ __webpack_require__.r(__webpack_exports__);
     });
     const {
       linkUrl,
-      linkTarget
+      linkTarget,
+      rel
     } = attributes;
     const [showPopover, setShowPopover] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(false);
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.Fragment, {
@@ -116,47 +90,43 @@ __webpack_require__.r(__webpack_exports__);
         position: "bottom",
         onClose: () => setShowPopover(false),
         focusOnMount: false,
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
           style: {
-            width: 360,
-            padding: 12
+            width: 360
           },
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Flex, {
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.FlexBlock, {
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.TextControl, {
-                placeholder: "Paste or type a URL",
-                value: attributes.linkUrl,
-                onChange: url => setAttributes({
-                  linkUrl: url
-                })
-              })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.FlexItem, {
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.ToolbarButton, {
-                icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_7__["default"],
-                label: "Apply",
-                onClick: () => setShowPopover(false)
-              })
-            }), attributes.linkUrl && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.FlexItem, {
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.ToolbarButton
-              //icon={no}
-              , {
-                label: "Clear",
-                onClick: () => {
-                  setAttributes({
-                    linkUrl: "",
-                    linkTarget: undefined
-                  });
-                  setShowPopover(false);
-                }
-              })
-            })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.ToggleControl, {
-            label: "Open in new tab",
-            checked: attributes.linkTarget === "_blank",
-            onChange: value => setAttributes({
-              linkTarget: value ? "_blank" : undefined
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.LinkControl, {
+            searchInputPlaceholder: "Search or type URL",
+            value: {
+              url: attributes.linkUrl,
+              opensInNewTab: attributes.linkTarget === "_blank"
+            },
+            onChange: newValue => {
+              setAttributes({
+                linkUrl: newValue.url,
+                linkTarget: newValue.opensInNewTab ? "_blank" : undefined
+              });
+            },
+            settings: [{
+              id: "opensInNewTab",
+              title: "Open in new tab",
+              onChange: isNewTab => setAttributes({
+                linkTarget: isNewTab ? "_blank" : undefined
+              }),
+              checked: attributes.linkTarget === "_blank"
+            }, {
+              id: "markAsNofollow",
+              title: "Mark as nofollow",
+              onChange: value => setAttributes({
+                rel: value ? "nofollow" : undefined
+              }),
+              checked: attributes.rel === "nofollow"
+            }],
+            onRemove: () => setAttributes({
+              linkUrl: undefined,
+              linkTarget: undefined,
+              rel: undefined
             })
-          })]
+          })
         })
       })]
     });
@@ -255,16 +225,6 @@ module.exports = window["wp"]["element"];
 /***/ ((module) => {
 
 module.exports = window["wp"]["hooks"];
-
-/***/ }),
-
-/***/ "@wordpress/primitives":
-/*!************************************!*\
-  !*** external ["wp","primitives"] ***!
-  \************************************/
-/***/ ((module) => {
-
-module.exports = window["wp"]["primitives"];
 
 /***/ }),
 

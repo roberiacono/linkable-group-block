@@ -90,7 +90,7 @@ function linkable_group_wrap_with_link( $block_content, $block ) {
 
     // Create stretched link HTML
 	$link_html = sprintf(
-		'<a href="%s"%s%s class="group-link" aria-label="%s"></a>',
+		'<a href="%s"%s%s class="stretched-link" aria-label="%s"></a>',
 		$url,
 		$target ? ' target="' . $target . '"' : '',
 		$rel ? ' rel="' . $rel . '"' : '',
