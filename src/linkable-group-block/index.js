@@ -1,39 +1,160 @@
-/**
- * Registers a new block provided a unique name and an object defining its behavior.
- *
- * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
- */
-import { registerBlockType } from '@wordpress/blocks';
+import { addFilter } from "@wordpress/hooks";
+import { createHigherOrderComponent } from "@wordpress/compose";
+import { Fragment, useState } from "@wordpress/element";
+import { BlockControls } from "@wordpress/block-editor";
+import {
+	ToolbarGroup,
+	ToolbarButton,
+	Popover,
+	TextControl,
+	ToggleControl,
+	Button,
+	Flex,
+	FlexBlock,
+	FlexItem,
+} from "@wordpress/components";
+import { BlockListBlock } from "@wordpress/block-editor";
+import { check, adminLinks } from "@wordpress/icons";
 
-/**
- * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
- * All files containing `style` keyword are bundled together. The code used
- * gets applied both to the front of your site and to the editor.
- *
- * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
- */
-import './style.scss';
+import "./style.scss";
 
-/**
- * Internal dependencies
- */
-import Edit from './edit';
-import save from './save';
-import metadata from './block.json';
+// Add `linkUrl` attribute
+addFilter(
+	"blocks.registerBlockType",
+	"linkable-group-block/add-attributes",
+	(settings, name) => {
+		if (name !== "core/group") return settings;
 
-/**
- * Every block starts by registering a new block type definition.
- *
- * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
- */
-registerBlockType( metadata.name, {
-	/**
-	 * @see ./edit.js
-	 */
-	edit: Edit,
+		return {
+			...settings,
+			attributes: {
+				...settings.attributes,
+				linkUrl: {
+					type: "string",
+					default: "",
+				},
+				linkTarget: {
+					type: "string",
+					default: undefined,
+				},
+			},
+		};
+	},
+);
 
-	/**
-	 * @see ./save.js
-	 */
-	save,
-} );
+// Add toolbar button to editor
+addFilter(
+	"editor.BlockEdit",
+	"linkable-group-block/add-toolbar",
+	createHigherOrderComponent((BlockEdit) => {
+		return (props) => {
+			const { name, attributes, setAttributes, isSelected } = props;
+
+			if (name !== "core/group") return <BlockEdit {...props} />;
+
+			const { linkUrl, linkTarget } = attributes;
+			const [showPopover, setShowPopover] = useState(false);
+
+			return (
+				<Fragment>
+					<BlockEdit {...props} />
+					{isSelected && (
+						<BlockControls>
+							<ToolbarGroup>
+								<ToolbarButton
+									icon="admin-links"
+									label="Set Group Block Link"
+									isActive={!!linkUrl}
+									onClick={() => setShowPopover(!showPopover)}
+								/>
+							</ToolbarGroup>
+						</BlockControls>
+					)}
+					{isSelected && showPopover && (
+						<Popover
+							position="bottom"
+							onClose={() => setShowPopover(false)}
+							focusOnMount={false}
+						>
+							<div style={{ width: 360, padding: 12 }}>
+								<Flex>
+									<FlexBlock>
+										<TextControl
+											placeholder="Paste or type a URL"
+											value={attributes.linkUrl}
+											onChange={(url) => setAttributes({ linkUrl: url })}
+										/>
+									</FlexBlock>
+									<FlexItem>
+										<ToolbarButton
+											icon={check}
+											label="Apply"
+											onClick={() => setShowPopover(false)}
+										/>
+									</FlexItem>
+									{attributes.linkUrl && (
+										<FlexItem>
+											<ToolbarButton
+												//icon={no}
+												label="Clear"
+												onClick={() => {
+													setAttributes({ linkUrl: "", linkTarget: undefined });
+													setShowPopover(false);
+												}}
+											/>
+										</FlexItem>
+									)}
+								</Flex>
+
+								<ToggleControl
+									label="Open in new tab"
+									checked={attributes.linkTarget === "_blank"}
+									onChange={(value) =>
+										setAttributes({ linkTarget: value ? "_blank" : undefined })
+									}
+								/>
+							</div>
+						</Popover>
+					)}
+				</Fragment>
+			);
+		};
+	}, "withGroupLinkToolbar"),
+);
+
+// Modify how block appears inside editor — wrap with <a>
+/* addFilter(
+	"editor.BlockListBlock",
+	"linkable-group-block/wrap-editor-preview",
+	(BlockComponent) => (props) => {
+		const { name, attributes } = props;
+
+		if (name === "core/group" && attributes.linkUrl) {
+			return (
+				<a
+					href={attributes.linkUrl}
+					style={{ textDecoration: "none", color: "inherit", display: "block" }}
+				>
+					<BlockComponent {...props} />
+				</a>
+			);
+		}
+
+		return <BlockComponent {...props} />;
+	},
+); */
+
+// Modify how block saves — wrap saved content
+addFilter(
+	"blocks.getSaveContent.extraProps",
+	"linkable-group-block/save-wrapper",
+	(extraProps, blockType, attributes) => {
+		if (blockType.name !== "core/group") return extraProps;
+
+		if (attributes.linkUrl) {
+			extraProps["data-link-url"] = attributes.linkUrl;
+		}
+
+		return extraProps;
+	},
+);

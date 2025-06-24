@@ -57,3 +57,63 @@ function create_block_linkable_group_block_block_init() {
 	}
 }
 add_action( 'init', 'create_block_linkable_group_block_block_init' );
+
+add_action( 'wp_enqueue_scripts', 'linkable_group_block_enqueue_styles' );
+
+function linkable_group_block_enqueue_styles() {
+
+    $style_url  = plugins_url( 'build/linkable-group-block/style-index.css', __FILE__ );
+
+    wp_enqueue_style(
+        'linkable-group-block-style',
+        $style_url,
+    );
+
+}
+
+
+// Filter the rendered core/group block
+add_filter( 'render_block_core/group', 'linkable_group_wrap_with_link', 10, 2 );
+
+function linkable_group_wrap_with_link( $block_content, $block ) {
+    if (
+        empty( $block['attrs']['linkUrl'] ) ||
+        ! is_string( $block['attrs']['linkUrl'] )
+    ) {
+        return $block_content;
+    }
+
+    $url     = esc_url( $block['attrs']['linkUrl'] );
+	$target  = ! empty( $block['attrs']['linkTarget'] ) && $block['attrs']['linkTarget'] === '_blank' ? '_blank' : null;
+	$rel     = $target === '_blank' ? 'noopener noreferrer' : null;
+	$aria    = esc_attr( $url );
+
+    // Create stretched link HTML
+	$link_html = sprintf(
+		'<a href="%s"%s%s class="group-link" aria-label="%s"></a>',
+		$url,
+		$target ? ' target="' . $target . '"' : '',
+		$rel ? ' rel="' . $rel . '"' : '',
+		$aria
+	);
+
+
+	// Modify the img attributes using the HTML API.
+	$processor = new WP_HTML_Tag_Processor( $block_content );
+
+	if ( $processor->next_tag( 'div' ) ) {
+		$processor->add_class( 'is-linkable' );
+		$block_content = $processor->get_updated_html();
+	}
+	
+	$pos = strrpos($block_content, '</div>');
+
+	if ($pos !== false) {
+		// Insert the $link_html before the last closing </div>
+		$block_content = substr_replace($block_content, $link_html, $pos, 0);
+	}
+
+
+
+	return $block_content;
+}
