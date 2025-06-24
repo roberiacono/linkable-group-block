@@ -85,7 +85,7 @@ function linkable_group_wrap_with_link( $block_content, $block ) {
 
     $url     = esc_url( $block['attrs']['linkUrl'] );
 	$target  = ! empty( $block['attrs']['linkTarget'] ) && $block['attrs']['linkTarget'] === '_blank' ? '_blank' : null;
-	$rel     = $target === '_blank' ? 'noopener noreferrer' : null;
+	$rel     = 'noopener noreferrer' . ( ! empty( $block['attrs']['rel'] ) && $block['attrs']['rel'] === 'nofollow' ? ' nofollow' : '' );
 	$aria    = esc_attr( $url );
 
     // Create stretched link HTML

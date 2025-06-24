@@ -87,11 +87,13 @@ addFilter(
 									value={{
 										url: attributes.linkUrl,
 										opensInNewTab: attributes.linkTarget === "_blank",
+										markAsNofollow: attributes.rel === "nofollow",
 									}}
 									onChange={(newValue) => {
 										setAttributes({
 											linkUrl: newValue.url,
 											linkTarget: newValue.opensInNewTab ? "_blank" : undefined,
+											rel: newValue.markAsNofollow ? "nofollow" : undefined,
 										});
 									}}
 									settings={[
@@ -108,7 +110,9 @@ addFilter(
 											id: "markAsNofollow",
 											title: "Mark as nofollow",
 											onChange: (value) =>
-												setAttributes({ rel: value ? "nofollow" : undefined }),
+												setAttributes({
+													rel: value ? "nofollow" : undefined,
+												}),
 											checked: attributes.rel === "nofollow",
 										},
 									]}

@@ -98,12 +98,14 @@ __webpack_require__.r(__webpack_exports__);
             searchInputPlaceholder: "Search or type URL",
             value: {
               url: attributes.linkUrl,
-              opensInNewTab: attributes.linkTarget === "_blank"
+              opensInNewTab: attributes.linkTarget === "_blank",
+              markAsNofollow: attributes.rel === "nofollow"
             },
             onChange: newValue => {
               setAttributes({
                 linkUrl: newValue.url,
-                linkTarget: newValue.opensInNewTab ? "_blank" : undefined
+                linkTarget: newValue.opensInNewTab ? "_blank" : undefined,
+                rel: newValue.markAsNofollow ? "nofollow" : undefined
               });
             },
             settings: [{
